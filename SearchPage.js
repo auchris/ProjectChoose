@@ -93,6 +93,12 @@ class SearchPage extends Component {
 	};
   }
 	
+	//configures and initiates the search query
+	onSearchPressed() {  
+	  var query = urlForQueryAndPage('place_name', this.state.searchString, 1);
+	  this._executeQuery(query);
+	}
+	
    //prefixed with underscore to indicate private method
    _executeQuery(query) {  
 	  console.log(query);
@@ -117,12 +123,6 @@ class SearchPage extends Component {
 	  } else {
 		this.setState({ message: 'Location not recognized; please try again.'});
 	  }
-	}
-	
-	//configures and initiates the search query
-	onSearchPressed() {  
-	  var query = urlForQueryAndPage('place_name', this.state.searchString, 1);
-	  this._executeQuery(query);
 	}
 	
 	onLocationPressed() {
