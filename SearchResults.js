@@ -1,97 +1,109 @@
 'use strict';
  
 var React = require('react-native');
-var PropertyView = require('./PropertyView');
-
+var BookDetail = require('./BookDetail');
 var {
-  StyleSheet,
-  Image,
-  View,
-  TouchableHighlight,
-  ListView,
-  Text,
-  Component
-} = React;
-
+    StyleSheet,
+    View,
+    Text,
+    Component,
+    TouchableHighlight,
+    Image,
+    ListView
+    } = React;
+ 
 var styles = StyleSheet.create({
-  thumb: {
-    width: 80,
-    height: 80,
-    marginRight: 10
-  },
-  textContainer: {
-    flex: 1
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#dddddd'
-  },
-  price: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    color: '#48BBEC'
-  },
-  title: {
-    fontSize: 20,
-    color: '#656565'
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    padding: 10
-  }
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 20,
+        marginBottom: 8
+    },
+    author: {
+        color: '#656565'
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#dddddd'
+    },
+    listView: {
+        backgroundColor: '#F5FCFF'
+    },
+    cellContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+        padding: 10
+    },
+    thumbnail: {
+        width: 53,
+        height: 81,
+        marginRight: 10
+    },
+    rightContainer: {
+        flex: 1
+    }
 });
-
+ 
 class SearchResults extends Component {
  
-  constructor(props) {
-    super(props);
-    var dataSource = new ListView.DataSource(
-      {rowHasChanged: (r1, r2) => r1.guid !== r2.guid});
-    this.state = {
-      dataSource: dataSource.cloneWithRows(this.props.listings)
-    };
-   }
-
-	rowPressed(propertyGuid) {
-	  var property = this.props.listings.filter(prop => prop.guid === propertyGuid)[0];
-	 
-	  this.props.navigator.push({
-		title: "Property",
-		component: PropertyView,
-		passProps: {property: property}
-	  });
-	}
-	 
-	renderRow(rowData, sectionID, rowID) {
-	  var price = rowData.price_formatted.split(' ')[0];
-	 
-	  return (
-		<TouchableHighlight onPress={() => this.rowPressed(rowData.guid)}
-			underlayColor='#dddddd'>
-		  <View>
-			<View style={styles.rowContainer}>
-			  <Image style={styles.thumb} source={{ uri: rowData.img_url }} />
-			  <View  style={styles.textContainer}>
-				<Text style={styles.price}>{price}</Text>
-				<Text style={styles.title}
-					  numberOfLines={1}>{rowData.title}</Text>
-			  </View>
-			</View>
-			<View style={styles.separator}/>
-		  </View>
-		</TouchableHighlight>
-	  );
-	}
+    constructor(props) {
+        super(props);
  
-  render() {
-	  
-    return (
-      <ListView
-        dataSource={this.state.dataSource}
-        renderRow={this.renderRow.bind(this)}/>
-    );
-  }
+        var dataSource = new ListView.DataSource(
+            {rowHasChanged: (row1, row2) => row1 !== row2});
+        this.state = {
+            dataSource: dataSource.cloneWithRows(this.props.books)
+        };
+    }
+ 
+    render() {
+ 
+        return (
+            <ListView
+                dataSource={this.state.dataSource}
+                renderRow={this.renderBook.bind(this)}
+                style={styles.listView}
+                />
+        );
+    }
+ 
+    renderBook(book) {
+        var imageURI = (typeof book.volumeInfo.imageLinks !== 'undefined') ? book.volumeInfo.imageLinks.thumbnail : '';
+ 
+        return (
+            <TouchableHighlight onPress={() => this.showBookDetail(book)}
+                                underlayColor='#dddddd'>
+                <View>
+                    <View style={styles.cellContainer}>
+                        <Image
+                            source={{uri: imageURI}}
+                            style={styles.thumbnail} />
+                        <View style={styles.rightContainer}>
+                            <Text style={styles.title}>{book.volumeInfo.title}</Text>
+                            <Text style={styles.author}>{book.volumeInfo.authors}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.separator} />
+                </View>
+            </TouchableHighlight>
+        );
+    }
+ 
+    showBookDetail(book) {
+ 
+        this.props.navigator.push({
+            title: book.volumeInfo.title,
+            component: BookDetail,
+            passProps: {book}
+        });
+    }
  
 }
-
+ 
 module.exports = SearchResults;

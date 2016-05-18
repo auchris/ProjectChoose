@@ -1,8 +1,19 @@
-'use strict';
+'use strict'; //this improved error handling for React Native
 
+//imports
 var React = require('react-native');
-var SearchPage = require('./SearchPage');
-
+var HomePage = require('./HomePage');
+ 
+var {
+	Text,
+	View,
+    AppRegistry,
+    TabBarIOS,
+    Component,
+	Platform,
+	TouchableHighlight,
+	StyleSheet
+   } = React; //destructuring assignment
 
 var styles = React.StyleSheet.create({
   text: {
@@ -16,7 +27,6 @@ var styles = React.StyleSheet.create({
   }
 });
 
-
 class ProjectRandom extends React.Component {
   render() {
     return (
@@ -24,11 +34,10 @@ class ProjectRandom extends React.Component {
         style={styles.container}
         initialRoute={{
           title: 'Project Random',
-          component: SearchPage,
+          component: HomePage,
         }}/>
     );
   }
 }
-
 
 React.AppRegistry.registerComponent('ProjectRandom', function() { return ProjectRandom });

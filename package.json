@@ -6,6 +6,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "googleapis": "^6.1.0",
+    "oauth": "^0.9.14",
     "react": "^0.14.8",
     "react-native": "^0.24.1"
   }
